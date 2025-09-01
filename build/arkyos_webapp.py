@@ -690,7 +690,7 @@ def mostrar_atributos_streamlit(atributo):
                 st.table(tabela_filtrada(indices, valores))
             st.markdown(f"**MS Magic:** {formatar_valor(atributo.ms_magic)}")
 
-            st.markdown("**Magias Específicas**")
+            st.markdown("**Classes Específicas**")
             indices = ["Jumper", "Mago", "Necromante", "Sacerdote", "Invocador", "Demonista", "Bardo", "Ilusionista"]
             mdg = [atributo.mdg_jumper, atributo.mdg_mago, atributo.mdg_necromante, atributo.mdg_sacerdote,
                    atributo.mdg_invocador, atributo.mdg_demonista, atributo.mdg_bardo, atributo.mdg_ilusionista]
