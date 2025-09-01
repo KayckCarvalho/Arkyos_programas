@@ -598,275 +598,168 @@ def atributo_inteligencia(atributo):
         if atributo.nm_foco > 30:
             atributo.nm_foco = 30
 
+def formatar_valor(valor):
+    if valor == int(valor):
+        return f"{int(valor)}"
+    else:
+        return f"{valor:.2f}".replace('.', ',')
+
+def tabela_filtrada(indices, valores):
+    dados = [(nome, valor) for nome, valor in zip(indices, valores) if valor != 0]
+    if not dados:
+        return pd.DataFrame({"Atributo": ["Nenhum valor"], "Valor": ["-"]})
+    nomes, vals = zip(*dados)
+    return pd.DataFrame({
+        "Atributo": nomes,
+        "Valor": [formatar_valor(v) for v in vals]
+    })
+
 def mostrar_atributos_streamlit(atributo):
     st.subheader("Atributos Base")
     base = {
-        "Força": [atributo.forca],
-        "Destreza": [atributo.destreza],
-        "Agilidade": [atributo.agilidade],
-        "Constituição": [atributo.constituicao],
-        "Inteligência": [atributo.inteligencia]
+        "Força": [formatar_valor(atributo.forca)],
+        "Destreza": [formatar_valor(atributo.destreza)],
+        "Agilidade": [formatar_valor(atributo.agilidade)],
+        "Constituição": [formatar_valor(atributo.constituicao)],
+        "Inteligência": [formatar_valor(atributo.inteligencia)]
     }
     st.table(pd.DataFrame(base))
 
     if atributo.tem_mana:
         with st.expander("Força"):
-            df_forca = pd.DataFrame({
-                "Valor": [
-                    atributo.pdg_tank,
-                    atributo.pdg_max,
-                    atributo.pdg_med,
-                    atributo.pdg_dps,
-                    atributo.pdg_flanco,
-                    atributo.pdg_magic,
-                    atributo.pdg_suporte,
-                    atributo.impacto_tank,
-                    atributo.impacto_max,
-                    atributo.impacto_lutador,
-                    atributo.kg_tank,
-                    atributo.kg_max,
-                    atributo.kg_med,
-                    atributo.kg_dps,
-                    atributo.kg_flanco,
-                    atributo.kg_magic,
-                    atributo.kg_suporte
-                ]
-            }, index=[
+            indices = [
                 "PDG Tank", "PDG Max", "PDG Med", "PDG DPS", "PDG Flanco", "PDG Magic", "PDG Suporte",
                 "Impacto Tank", "Impacto Max", "Impacto Lutador",
                 "KG Tank", "KG Max", "KG Med", "KG DPS", "KG Flanco", "KG Magic", "KG Suporte"
-            ])
-            st.table(df_forca)
+            ]
+            valores = [
+                atributo.pdg_tank, atributo.pdg_max, atributo.pdg_med, atributo.pdg_dps, atributo.pdg_flanco, atributo.pdg_magic, atributo.pdg_suporte,
+                atributo.impacto_tank, atributo.impacto_max, atributo.impacto_lutador,
+                atributo.kg_tank, atributo.kg_max, atributo.kg_med, atributo.kg_dps, atributo.kg_flanco, atributo.kg_magic, atributo.kg_suporte
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Destreza"):
-            df_destreza = pd.DataFrame({
-                "Valor": [
-                    atributo.qd_classes,
-                    atributo.qd_combatente,
-                    atributo.qd_dps,
-                    atributo.cm_dps,
-                    atributo.ms_tank,
-                    atributo.ms_max,
-                    atributo.ms_med,
-                    atributo.ms_dps,
-                    atributo.ms_flanco,
-                    atributo.ms_suporte
-                ]
-            }, index=[
+            indices = [
                 "QD Classes", "QD Combatente", "QD DPS", "CM DPS",
                 "MS Tank", "MS Max", "MS Med", "MS DPS", "MS Flanco", "MS Suporte"
-            ])
-            st.table(df_destreza)
+            ]
+            valores = [
+                atributo.qd_classes, atributo.qd_combatente, atributo.qd_dps, atributo.cm_dps,
+                atributo.ms_tank, atributo.ms_max, atributo.ms_med, atributo.ms_dps, atributo.ms_flanco, atributo.ms_suporte
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Agilidade"):
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown("**KM**")
-                df_km = pd.DataFrame({
-                    "Valor": [
-                        atributo.km_tank,
-                        atributo.km_max,
-                        atributo.km_med,
-                        atributo.km_dps,
-                        atributo.km_flanco,
-                        atributo.km_magic,
-                        atributo.km_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"])
-                st.table(df_km)
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"]
+                valores = [atributo.km_tank, atributo.km_max, atributo.km_med, atributo.km_dps, atributo.km_flanco, atributo.km_magic, atributo.km_suporte]
+                st.table(tabela_filtrada(indices, valores))
             with col2:
                 st.markdown("**ASPD**")
-                df_aspd = pd.DataFrame({
-                    "Valor": [
-                        atributo.aspd_tank,
-                        atributo.aspd_max,
-                        atributo.aspd_med,
-                        atributo.aspd_dps,
-                        atributo.aspd_flanco,
-                        atributo.aspd_magic,
-                        atributo.aspd_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"])
-                st.table(df_aspd)
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"]
+                valores = [atributo.aspd_tank, atributo.aspd_max, atributo.aspd_med, atributo.aspd_dps, atributo.aspd_flanco, atributo.aspd_magic, atributo.aspd_suporte]
+                st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Constituição"):
-            df_const = pd.DataFrame({
-                "Valor": [
-                    atributo.pdr_tank,
-                    atributo.vida_tank,
-                    atributo.pdr_max,
-                    atributo.vida_max,
-                    atributo.pdr_med,
-                    atributo.vida_med,
-                    atributo.pdr_dps,
-                    atributo.vida_dps,
-                    atributo.pdr_flanco,
-                    atributo.vida_flanco,
-                    atributo.pdr_magic,
-                    atributo.vida_magic,
-                    atributo.pdr_suporte,
-                    atributo.vida_suporte,
-                    atributo.mm_fisico,
-                    atributo.mm_militar
-                ]
-            }, index=[
+            indices = [
                 "PDR Tank", "Vida Tank", "PDR Max", "Vida Max", "PDR Med", "Vida Med",
                 "PDR DPS", "Vida DPS", "PDR Flanco", "Vida Flanco", "PDR Magic", "Vida Magic",
                 "PDR Suporte", "Vida Suporte", "MM Físico", "MM Militar"
-            ])
-            st.table(df_const)
+            ]
+            valores = [
+                atributo.pdr_tank, atributo.vida_tank, atributo.pdr_max, atributo.vida_max, atributo.pdr_med, atributo.vida_med,
+                atributo.pdr_dps, atributo.vida_dps, atributo.pdr_flanco, atributo.vida_flanco, atributo.pdr_magic, atributo.vida_magic,
+                atributo.pdr_suporte, atributo.vida_suporte, atributo.mm_fisico, atributo.mm_militar
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Inteligência"):
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown("**MDR**")
-                df_mdr = pd.DataFrame({
-                    "Valor": [
-                        atributo.mdr_tank,
-                        atributo.mdr_max,
-                        atributo.mdr_med,
-                        atributo.mdr_dps,
-                        atributo.mdr_flanco,
-                        atributo.mdr_magic,
-                        atributo.mdr_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"])
-                st.table(df_mdr)
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"]
+                valores = [atributo.mdr_tank, atributo.mdr_max, atributo.mdr_med, atributo.mdr_dps, atributo.mdr_flanco, atributo.mdr_magic, atributo.mdr_suporte]
+                st.table(tabela_filtrada(indices, valores))
             with col2:
                 st.markdown("**Mana**")
-                df_mana = pd.DataFrame({
-                    "Valor": [
-                        atributo.mana_tank,
-                        atributo.mana_max,
-                        atributo.mana_med,
-                        atributo.mana_dps,
-                        atributo.mana_flanco,
-                        atributo.mana_magic,
-                        atributo.mana_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"])
-                st.table(df_mana)
-            st.markdown(f"**MS Magic:** {atributo.ms_magic:.2f}")
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Magic", "Suporte"]
+                valores = [atributo.mana_tank, atributo.mana_max, atributo.mana_med, atributo.mana_dps, atributo.mana_flanco, atributo.mana_magic, atributo.mana_suporte]
+                st.table(tabela_filtrada(indices, valores))
+            st.markdown(f"**MS Magic:** {formatar_valor(atributo.ms_magic)}")
 
             st.markdown("**Magias Específicas**")
-            df_magias = pd.DataFrame({
-                "MDG": [
-                    atributo.mdg_jumper, atributo.mdg_mago, atributo.mdg_necromante, atributo.mdg_sacerdote,
-                    atributo.mdg_invocador, atributo.mdg_demonista, atributo.mdg_bardo, atributo.mdg_ilusionista
-                ],
-                "Ritmo": [
-                    atributo.rit_jumper, atributo.rit_mago, atributo.rit_necromante, atributo.rit_sacerdote,
-                    atributo.rit_invocador, atributo.rit_demonista, atributo.rit_bardo, atributo.rit_ilusionista
-                ]
-            }, index=[
-                "Jumper", "Mago", "Necromante", "Sacerdote", "Invocador", "Demonista", "Bardo", "Ilusionista"
-            ])
-            st.table(df_magias)
+            indices = ["Jumper", "Mago", "Necromante", "Sacerdote", "Invocador", "Demonista", "Bardo", "Ilusionista"]
+            mdg = [atributo.mdg_jumper, atributo.mdg_mago, atributo.mdg_necromante, atributo.mdg_sacerdote,
+                   atributo.mdg_invocador, atributo.mdg_demonista, atributo.mdg_bardo, atributo.mdg_ilusionista]
+            ritmo = [atributo.rit_jumper, atributo.rit_mago, atributo.rit_necromante, atributo.rit_sacerdote,
+                     atributo.rit_invocador, atributo.rit_demonista, atributo.rit_bardo, atributo.rit_ilusionista]
+            magias = [(nome, m, r) for nome, m, r in zip(indices, mdg, ritmo) if m != 0 or r != 0]
+            if magias:
+                st.table(pd.DataFrame({
+                    "Classe": [m[0] for m in magias],
+                    "MDG": [formatar_valor(m[1]) for m in magias],
+                    "Ritmo": [formatar_valor(m[2]) for m in magias]
+                }))
+            else:
+                st.write("Nenhuma magia específica.")
+
     else:
         st.info("Personagem Primitivo")
         with st.expander("Força"):
-            df_forca = pd.DataFrame({
-                "Valor": [
-                    atributo.nm_pdg_tank,
-                    atributo.nm_pdg_max,
-                    atributo.nm_pdg_med,
-                    atributo.nm_pdg_dps,
-                    atributo.nm_pdg_flanco,
-                    atributo.nm_pdg_suporte,
-                    atributo.nm_impacto_tank,
-                    atributo.nm_impacto_max,
-                    atributo.nm_impacto_lutador,
-                    atributo.nm_kg_tank,
-                    atributo.nm_kg_max,
-                    atributo.nm_kg_med,
-                    atributo.nm_kg_dps,
-                    atributo.nm_kg_flanco,
-                    atributo.nm_kg_suporte
-                ]
-            }, index=[
+            indices = [
                 "PDG Tank", "PDG Max", "PDG Med", "PDG DPS", "PDG Flanco", "PDG Suporte",
                 "Impacto Tank", "Impacto Max", "Impacto Lutador",
                 "KG Tank", "KG Max", "KG Med", "KG DPS", "KG Flanco", "KG Suporte"
-            ])
-            st.table(df_forca)
+            ]
+            valores = [
+                atributo.nm_pdg_tank, atributo.nm_pdg_max, atributo.nm_pdg_med, atributo.nm_pdg_dps, atributo.nm_pdg_flanco, atributo.nm_pdg_suporte,
+                atributo.nm_impacto_tank, atributo.nm_impacto_max, atributo.nm_impacto_lutador,
+                atributo.nm_kg_tank, atributo.nm_kg_max, atributo.nm_kg_med, atributo.nm_kg_dps, atributo.nm_kg_flanco, atributo.nm_kg_suporte
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Destreza"):
-            df_destreza = pd.DataFrame({
-                "Valor": [
-                    atributo.nm_qd_classes,
-                    atributo.nm_qd_combatente,
-                    atributo.nm_qd_dps,
-                    atributo.nm_cm_dps,
-                    atributo.nm_ms_tank,
-                    atributo.nm_ms_max,
-                    atributo.nm_ms_med,
-                    atributo.nm_ms_dps,
-                    atributo.nm_ms_flanco,
-                    atributo.nm_ms_suporte
-                ]
-            }, index=[
+            indices = [
                 "QD Classes", "QD Combatente", "QD DPS", "CM DPS",
                 "MS Tank", "MS Max", "MS Med", "MS DPS", "MS Flanco", "MS Suporte"
-            ])
-            st.table(df_destreza)
+            ]
+            valores = [
+                atributo.nm_qd_classes, atributo.nm_qd_combatente, atributo.nm_qd_dps, atributo.nm_cm_dps,
+                atributo.nm_ms_tank, atributo.nm_ms_max, atributo.nm_ms_med, atributo.nm_ms_dps, atributo.nm_ms_flanco, atributo.nm_ms_suporte
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Agilidade"):
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown("**KM**")
-                df_km = pd.DataFrame({
-                    "Valor": [
-                        atributo.nm_km_tank,
-                        atributo.nm_km_max,
-                        atributo.nm_km_med,
-                        atributo.nm_km_dps,
-                        atributo.nm_km_flanco,
-                        atributo.nm_km_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Suporte"])
-                st.table(df_km)
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Suporte"]
+                valores = [atributo.nm_km_tank, atributo.nm_km_max, atributo.nm_km_med, atributo.nm_km_dps, atributo.nm_km_flanco, atributo.nm_km_suporte]
+                st.table(tabela_filtrada(indices, valores))
             with col2:
                 st.markdown("**ASPD**")
-                df_aspd = pd.DataFrame({
-                    "Valor": [
-                        atributo.nm_aspd_tank,
-                        atributo.nm_aspd_max,
-                        atributo.nm_aspd_med,
-                        atributo.nm_aspd_dps,
-                        atributo.nm_aspd_flanco,
-                        atributo.nm_aspd_suporte
-                    ]
-                }, index=["Tank", "Max", "Med", "DPS", "Flanco", "Suporte"])
-                st.table(df_aspd)
+                indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Suporte"]
+                valores = [atributo.nm_aspd_tank, atributo.nm_aspd_max, atributo.nm_aspd_med, atributo.nm_aspd_dps, atributo.nm_aspd_flanco, atributo.nm_aspd_suporte]
+                st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Constituição"):
-            df_const = pd.DataFrame({
-                "Valor": [
-                    atributo.nm_pdr_tank,
-                    atributo.nm_vida_tank,
-                    atributo.nm_pdr_max,
-                    atributo.nm_vida_max,
-                    atributo.nm_pdr_med,
-                    atributo.nm_vida_med,
-                    atributo.nm_pdr_dps,
-                    atributo.nm_vida_dps,
-                    atributo.nm_pdr_flanco,
-                    atributo.nm_vida_flanco,
-                    atributo.nm_pdr_suporte,
-                    atributo.nm_vida_suporte,
-                    atributo.nm_mm_fisico,
-                    atributo.nm_mm_militar
-                ]
-            }, index=[
+            indices = [
                 "PDR Tank", "Vida Tank", "PDR Max", "Vida Max", "PDR Med", "Vida Med",
                 "PDR DPS", "Vida DPS", "PDR Flanco", "Vida Flanco",
                 "PDR Suporte", "Vida Suporte", "MM Físico", "MM Militar"
-            ])
-            st.table(df_const)
+            ]
+            valores = [
+                atributo.nm_pdr_tank, atributo.nm_vida_tank, atributo.nm_pdr_max, atributo.nm_vida_max, atributo.nm_pdr_med, atributo.nm_vida_med,
+                atributo.nm_pdr_dps, atributo.nm_vida_dps, atributo.nm_pdr_flanco, atributo.nm_vida_flanco,
+                atributo.nm_pdr_suporte, atributo.nm_vida_suporte, atributo.nm_mm_fisico, atributo.nm_mm_militar
+            ]
+            st.table(tabela_filtrada(indices, valores))
 
         with st.expander("Inteligência"):
-            st.markdown(f"**Foco:** {atributo.nm_foco:.2f} &nbsp;&nbsp; **Reação:** {atributo.nm_reacao:.2f}")
-
+            st.markdown(f"**Foco:** {formatar_valor(atributo.nm_foco)} &nbsp;&nbsp; **Reação:** {formatar_valor(atributo.nm_reacao)}")
 # --- Streamlit Interface ---
 st.title("Sistema de Cálculo de Atributos - Arkyos RPG")
 st.markdown("Preencha os campos abaixo para calcular os atributos do seu personagem.")
