@@ -694,14 +694,14 @@ def mostrar_atributos_streamlit(atributo):
             indices = ["Jumper", "Mago", "Necromante", "Sacerdote", "Invocador", "Demonista", "Bardo", "Ilusionista"]
             mdg = [atributo.mdg_jumper, atributo.mdg_mago, atributo.mdg_necromante, atributo.mdg_sacerdote,
                    atributo.mdg_invocador, atributo.mdg_demonista, atributo.mdg_bardo, atributo.mdg_ilusionista]
-            ritmo = [atributo.rit_jumper, atributo.rit_mago, atributo.rit_necromante, atributo.rit_sacerdote,
+            rit = [atributo.rit_jumper, atributo.rit_mago, atributo.rit_necromante, atributo.rit_sacerdote,
                      atributo.rit_invocador, atributo.rit_demonista, atributo.rit_bardo, atributo.rit_ilusionista]
-            magias = [(nome, m, r) for nome, m, r in zip(indices, mdg, ritmo) if m != 0 or r != 0]
+            magias = [(nome, m, r) for nome, m, r in zip(indices, mdg, rit) if m != 0 or r != 0]
             if magias:
                 st.table(pd.DataFrame({
                     "Classe": [m[0] for m in magias],
                     "MDG": [formatar_valor(m[1]) for m in magias],
-                    "Ritmo": [formatar_valor(m[2]) for m in magias]
+                    "RIT": [formatar_valor(m[2]) for m in magias]
                 }))
             else:
                 st.write("Nenhuma magia específica.")
