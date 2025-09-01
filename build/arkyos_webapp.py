@@ -806,17 +806,12 @@ def mostrar_atributos_streamlit(atributo):
 st.title("Sistema de Cálculo de Atributos - Arkyos RPG")
 st.markdown("Preencha os campos abaixo para calcular os atributos do seu personagem.")
 
-st.title("Sistema de Cálculo de Atributos - Arkyos RPG")
-st.markdown("Preencha os campos abaixo para calcular os atributos do seu personagem.")
-
-
 raca = st.selectbox("Sua raça é primitiva?", ["Não", "Sim"])
 forca = st.number_input("Força", min_value=0.0, step=1.0)
 destreza = st.number_input("Destreza", min_value=0.0, step=1.0)
 agilidade = st.number_input("Agilidade", min_value=0.0, step=1.0)
 constituicao = st.number_input("Constituição", min_value=0.0, step=1.0)
 inteligencia = st.number_input("Inteligência", min_value=0.0, step=1.0)
-
 
 if st.button("Calcular"):
     atributo = atributos()
@@ -835,5 +830,6 @@ if st.button("Calcular"):
 
     mostrar_atributos_streamlit(atributo)
 
+# Fora do if, sempre visível:
 with st.expander("Cálculo de Pontos de Especialidade"):
     calcular_pontos_especialidade()
