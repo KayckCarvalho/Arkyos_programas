@@ -740,7 +740,7 @@ def mostrar_atributos_streamlit(atributo):
                 valores = [atributo.nm_km_tank, atributo.nm_km_max, atributo.nm_km_med, atributo.nm_km_dps, atributo.nm_km_flanco, atributo.nm_km_suporte]
                 st.table(tabela_filtrada(indices, valores))
             with col2:
-                st.markdown("**ASPD**")
+                st.markdown("**Atack Speed**")
                 indices = ["Tank", "Max", "Med", "DPS", "Flanco", "Suporte"]
                 valores = [atributo.nm_aspd_tank, atributo.nm_aspd_max, atributo.nm_aspd_med, atributo.nm_aspd_dps, atributo.nm_aspd_flanco, atributo.nm_aspd_suporte]
                 st.table(tabela_filtrada(indices, valores))
