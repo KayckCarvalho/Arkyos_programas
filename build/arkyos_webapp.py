@@ -614,6 +614,48 @@ def tabela_filtrada(indices, valores):
         "Valor": [formatar_valor(v) for v in vals]
     })
 
+def calcular_pontos_especialidade():
+    st.subheader("Cálculo de Pontos de Especialidade")
+    lista_especialidade = [
+        'formação', 'formacao', 'iniciante', 'aprendiz', 'intermediario',
+        'grande artesão', 'grande artesao', 'pseudo-mestre'
+    ]
+
+    with st.form("form_especialidade"):
+        nome = st.text_input("Qual a especialidade que está praticando?")
+        livro = st.number_input("Quantas horas você estudou?", min_value=0, step=1)
+        pratica = st.number_input("Quantas horas você praticou?", min_value=0, step=1)
+        educador = st.number_input("Quantas horas você teve com educador?", min_value=0, step=1)
+        especialidade = st.selectbox(
+            "Qual o seu nível de especialidade?",
+            ['formação', 'iniciante', 'aprendiz', 'intermediario', 'grande artesão', 'pseudo-mestre']
+        )
+        submitted = st.form_submit_button("Calcular Pontos")
+
+    if submitted:
+        pontos_ganhos = 0
+        if especialidade in ['formação', 'formacao']:
+            pontos_ganhos += 0
+        elif especialidade == 'iniciante':
+            pontos_ganhos += 10
+        elif especialidade == 'aprendiz':
+            pontos_ganhos += 20
+        elif especialidade == 'intermediario':
+            pontos_ganhos += 30
+        elif especialidade in ['grande artesão', 'grande artesao']:
+            pontos_ganhos += 20
+        elif especialidade == 'pseudo-mestre':
+            pontos_ganhos += 25
+
+        l = livro * 1
+        e = educador * 5
+        p = pratica * 3
+
+        pontos_ganhos += l + p + e
+
+        st.success(f"Pontos totais de {nome}: {pontos_ganhos}")
+
+
 def mostrar_atributos_streamlit(atributo):
     st.subheader("Atributos Base")
     base = {
@@ -764,6 +806,10 @@ def mostrar_atributos_streamlit(atributo):
 st.title("Sistema de Cálculo de Atributos - Arkyos RPG")
 st.markdown("Preencha os campos abaixo para calcular os atributos do seu personagem.")
 
+st.title("Sistema de Cálculo de Atributos - Arkyos RPG")
+st.markdown("Preencha os campos abaixo para calcular os atributos do seu personagem.")
+
+
 raca = st.selectbox("Sua raça é primitiva?", ["Não", "Sim"])
 forca = st.number_input("Força", min_value=0.0, step=1.0)
 destreza = st.number_input("Destreza", min_value=0.0, step=1.0)
@@ -788,3 +834,6 @@ if st.button("Calcular"):
     atributo_inteligencia(atributo)
 
     mostrar_atributos_streamlit(atributo)
+
+with st.expander("Cálculo de Pontos de Especialidade"):
+    calcular_pontos_especialidade()
